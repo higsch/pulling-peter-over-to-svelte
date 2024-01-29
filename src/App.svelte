@@ -9,16 +9,15 @@
 
 	import data from './data.json';
 
-	const width = 600;
-	const height = 400;
-
-	const yScale = scaleLinear()
-		.domain(extent(data, (d) => d.yValue))
-		.range([height, 0]);
+	let width, height;
 
 	$: xScale = scaleLinear()
 		.domain(extent(data, (d) => d.xValue))
-		.range([0, width]);
+		.range([0, width || 1]);
+
+	$: yScale = scaleLinear()
+		.domain(extent(data, (d) => d.yValue))
+		.range([height || 1, 0]);
 
 	$: lineGenerator = line()
 		.x((d) => xScale(d.xValue))
@@ -32,7 +31,10 @@
 		.curve(curve);
 </script>
 
-<main>
+<main
+	bind:clientWidth={width}
+	bind:clientHeight={height}
+>
 	<svg
 		width={width}
 		height={height}
